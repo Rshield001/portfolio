@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Archielled Acot | Portfolio</title>
-  <link rel="icon" type="image/png" href="assests/Background.png">
+  <!-- <link rel="icon" type="image/png" href="assests/Background.png"> -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,7 +24,7 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow">Computer Science Student</p>
-        <h1>Hi, I’m Archielled — a developer building practical digital solutions.</h1>
+        <h1>Hi, I’m Archielled — a CS student building practical digital solutions.</h1>
         <p class="lead">
           I’m a Computer Science student with experience contributing to the development of a mobile app using React Native and PostgreSQL.
           I’m interested in learning through practical applications and gradually improving my technical skills through real-world projects.
@@ -155,5 +155,23 @@
       <p>Designed with intention.</p>
     </div>
   </footer>
+
+  <script>
+    const scrollFadeElements = document.querySelectorAll(".hero, .content-panel");
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      scrollFadeElements.forEach((element) => element.classList.add("is-visible"));
+    } else {
+      scrollFadeElements.forEach((element) => element.classList.add("scroll-fade"));
+
+      const scrollFadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          entry.target.classList.toggle("is-visible", entry.isIntersecting);
+        });
+      }, { threshold: 0.12 });
+
+      scrollFadeElements.forEach((element) => scrollFadeObserver.observe(element));
+    }
+  </script>
 </body>
 </html>
