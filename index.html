@@ -91,7 +91,7 @@
         </article>
         <article class="skill-card">
           <h3>Backend & Database</h3>
-          <p>PostgreSQL, Node.js, API integration</p>
+          <p>PostgreSQL, Node.js, Express.js, Supabase, REST API</p>
         </article>
         <article class="skill-card">
           <h3>UI/UX</h3>
@@ -110,11 +110,49 @@
         <h2>SUKI (Smart Users, Key Incentives) 2024 - 2025</h2>
       </div>
 
-      <div class="projects-grid single-project">
+      <div class="projects-grid project-showcase">
         <article class="project-card project-featured">
           <span class="tag">University Mobile App</span>
           <h3>QR-based rewards and vendor engagement system</h3>
           <p>Suki is a full-stack React Native loyalty and rewards application that connects customers with local vendors. The platform supports customer and vendor workflows, QR-code-based transactions, points accumulation, reward redemption, product management, authentication, and transaction history. It uses a React Native mobile frontend, Express.js REST API, and Supabase database and authentication services.</p>
+        </article>
+
+        <article class="project-card project-sample-card">
+          <span class="tag">Project Sample</span>
+          <h3>See SUKI in action</h3>
+          <p>Customer and vendor screens from the SUKI mobile application.</p>
+
+          <div class="project-sample-carousel" aria-label="SUKI app screenshots" aria-roledescription="carousel">
+            <div class="sample-slides">
+              <img class="sample-slide is-active" src="assests/suki_customer_ss/Screenshot_20251122_000925.png" alt="SUKI customer app screen 1" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001215.png" alt="SUKI customer app screen 2" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001245.png" alt="SUKI customer app screen 3" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001512.png" alt="SUKI customer app screen 4" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001533.png" alt="SUKI customer app screen 5" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001608.png" alt="SUKI customer app screen 6" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_001755.png" alt="SUKI customer app screen 7" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_002912.png" alt="SUKI customer app screen 8" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_002934.png" alt="SUKI customer app screen 9" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_003525.png" alt="SUKI customer app screen 10" />
+              <img class="sample-slide" src="assests/suki_customer_ss/Screenshot_20251122_003558.png" alt="SUKI customer app screen 11" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_001004.png" alt="SUKI vendor app screen 1" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010117.png" alt="SUKI vendor app screen 2" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010137.png" alt="SUKI vendor app screen 3" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010204.png" alt="SUKI vendor app screen 4" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010233.png" alt="SUKI vendor app screen 5" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010305.png" alt="SUKI vendor app screen 6" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_010334.png" alt="SUKI vendor app screen 7" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_013657.png" alt="SUKI vendor app screen 8" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_013752.png" alt="SUKI vendor app screen 9" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_014228.png" alt="SUKI vendor app screen 10" />
+              <img class="sample-slide" src="assests/suki_vendor_ss/Screenshot_20251122_020232.png" alt="SUKI vendor app screen 11" />
+            </div>
+            <div class="carousel-controls">
+              <button class="carousel-button previous-slide" type="button" aria-label="Show previous screenshot">&#8592;</button>
+              <span class="carousel-status" aria-live="polite">1 / 22</span>
+              <button class="carousel-button next-slide" type="button" aria-label="Show next screenshot">&#8594;</button>
+            </div>
+          </div>
         </article>
       </div>
     </section>
@@ -130,7 +168,8 @@
           <div class="timeline-date">07/2025 — 12/2025</div>
           <div class="timeline-content">
             <h3>Thesis Project: SUKI</h3>
-            <p>Led mobile app development for a QR-based rewards platform, focusing on app feature implementation, UX design, and transaction logic.</p>
+            <p>Served as a primary developer for the mobile application, building customer and vendor workflows and contributing across both frontend and backend functionality. Implemented authentication and role-based navigation, QR-based point redemption, points synchronization APIs, rewards and voucher logic, transaction features, vendor analytics, and reusable themed UI components. Also worked on Debugging across frontend and backend systems, dependency updates, Jest configuration, and deployment readiness.
+</p>
           </div>
         </div>
       </div>
@@ -200,6 +239,43 @@
       }, { threshold: 0.12 });
 
       scrollFadeElements.forEach((element) => scrollFadeObserver.observe(element));
+    }
+
+    const carousel = document.querySelector(".project-sample-carousel");
+    const slides = carousel.querySelectorAll(".sample-slide");
+    const carouselStatus = carousel.querySelector(".carousel-status");
+    let activeSlide = 0;
+    let carouselTimer;
+
+    const showSlide = (slideIndex) => {
+      activeSlide = (slideIndex + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        slide.classList.toggle("is-active", index === activeSlide);
+      });
+      carouselStatus.textContent = `${activeSlide + 1} / ${slides.length}`;
+    };
+
+    const startCarousel = () => {
+      carouselTimer = window.setInterval(() => showSlide(activeSlide + 1), 3000);
+    };
+
+    const restartCarousel = () => {
+      window.clearInterval(carouselTimer);
+      startCarousel();
+    };
+
+    carousel.querySelector(".previous-slide").addEventListener("click", () => {
+      showSlide(activeSlide - 1);
+      restartCarousel();
+    });
+
+    carousel.querySelector(".next-slide").addEventListener("click", () => {
+      showSlide(activeSlide + 1);
+      restartCarousel();
+    });
+
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      startCarousel();
     }
   </script>
 </body>
