@@ -317,17 +317,18 @@ ul {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 420px;
+  min-height: 400px;
+  transform: scale(0.985);
 }
 
 .portrait-card {
   position: relative;
-  width: min(100%, 380px);
-  padding: 1.2rem;
+  width: min(100%, 340px);
+  padding: 1rem;
   background: linear-gradient(145deg, #fef4f5 0%, #f4dfe4 100%);
   border: 1px solid rgba(139, 30, 47, 0.12);
-  border-radius: 32px;
-  box-shadow: 0 25px 45px rgba(139, 30, 47, 0.2);
+  border-radius: 28px;
+  box-shadow: 0 20px 35px rgba(139, 30, 47, 0.18);
 }
 
 .portrait-card img {
@@ -336,6 +337,13 @@ ul {
   object-fit: cover;
   aspect-ratio: 4 / 5;
   background: #f0d9dc;
+  opacity: 1;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.portrait-card img.is-fading {
+  opacity: 0.35;
+   transform: scale(0.985); 
 }
 
 .floating-badge {

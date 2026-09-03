@@ -37,11 +37,11 @@
 
       </div>
 
-     <!-- <div class="hero-visual" aria-label="Profile illustration panel">
+      <div class="hero-visual" aria-label="Profile illustration panel">
         <div class="portrait-card">
-          <img src="assests/Background.png" alt="Archielled profile artwork" />
+          <img id="hero-image" src="assests/dp.jpg" alt="Archielled profile artwork in light mode" />
         </div>
-      </div> -->
+      </div>
     </section>
 
       <section id="about" class="content-panel about-panel">
@@ -98,7 +98,7 @@
         </article>
         <article class="skill-card">
           <h3>Tools</h3>
-          <p>Git, VS Code, Android Studio</p>
+          <p>Git, VS Code, Android Studio, AI-assisted development</p>
         </article>
       </div>
     </section>
@@ -197,17 +197,31 @@
   <script>
     const siteHeader = document.querySelector(".site-header");
     const themeToggle = document.querySelector(".theme-toggle");
+    const heroImage = document.getElementById("hero-image");
     const scrollFadeElements = document.querySelectorAll(".hero, .content-panel");
+
+    const syncHeroImage = (isDark) => {
+      heroImage.classList.add("is-fading");
+
+      window.setTimeout(() => {
+        heroImage.src = isDark ? "assests/dp2.jpg" : "assests/dp.jpg";
+        heroImage.alt = isDark
+          ? "Archielled profile artwork in dark mode"
+          : "Archielled profile artwork in light mode";
+        heroImage.classList.remove("is-fading");
+      }, 160);
+    };
 
     const setTheme = (isDark) => {
       document.body.classList.toggle("dark-mode", isDark);
       themeToggle.textContent = isDark ? "\u263E" : "\u263C";
       themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
       themeToggle.setAttribute("aria-pressed", String(isDark));
+      syncHeroImage(isDark);
       localStorage.setItem("theme", isDark ? "dark" : "light");
     };
 
-    setTheme(localStorage.getItem("theme") === "dark");
+    setTheme(false);
 
     themeToggle.addEventListener("click", () => {
       setTheme(!document.body.classList.contains("dark-mode"));
