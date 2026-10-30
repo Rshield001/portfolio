@@ -12,19 +12,19 @@
     <div class="container nav-wrap">
       <nav class="nav" aria-label="Main navigation">
         <a href="#about">About</a>
-        <a href="#work">Work</a>
         <a href="#skills">Skills</a>
+        <a href="#certifications">Certificates</a>
+        <a href="#work">Project/s</a>
         <a href="#experience">Experience</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">&#9788;</button>
     </div>
   </header>
 
   <main id="home" class="container main-content">
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Wanna be software engineer</p>
+        <p class="eyebrow">Aspiring software engineer</p>
         <h1>Hi, I’m Archielled — I build practical digital solutions.</h1>
         <p class="lead">
            I build and contribute to practical software project/s, with experience developing mobile applications using React Native and working with backend APIs, databases, and authentication services.
@@ -37,9 +37,23 @@
 
       </div>
 
-      <div class="hero-visual" aria-label="Profile illustration panel">
+      <div class="hero-visual" aria-label="Decorative cyberpunk profile graphic">
         <div class="portrait-card">
-          <img id="hero-image" src="assests/dp.jpg" alt="Archielled profile artwork in light mode" />
+          <div class="cyber-display" aria-hidden="true">
+            <div class="display-top">
+              <span>ARCHIELLED // PORTFOLIO</span>
+              <span class="live-indicator">SYSTEM ONLINE</span>
+            </div>
+            <div class="display-core">
+              <span class="core-orbit orbit-one"></span>
+              <span class="core-orbit orbit-two"></span>
+              <span class="core-monogram">A</span>
+            </div>
+            <div class="display-bottom">
+              <span>CREATIVE DEVELOPER</span>
+              <span>2026</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -102,6 +116,33 @@
         </article>
       </div>
     </section>
+
+    <section id="certifications" class="content-panel">
+      <div class="section-heading">
+        <p class="eyebrow">Certificates</p>
+        <h2>Software Engineering</h2>
+      </div>
+
+      <div class="certifications-grid">
+        <button class="certification-card" type="button" aria-label="View Introduction to Software Engineering certificate">
+          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31 043117.png" alt="Introduction to Software Engineering certificate from IBM and Coursera" />
+        </button>
+        <button class="certification-card" type="button" aria-label="View Software Engineering: Modeling Software Systems using UML certificate">
+          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042522.png" alt="Software Engineering: Modeling Software Systems using UML certificate" />
+        </button>
+        <button class="certification-card" type="button" aria-label="View Software Engineering: Implementation and Testing certificate">
+          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042536.png" alt="Software Engineering: Implementation and Testing certificate" />
+        </button>
+        <button class="certification-card" type="button" aria-label="View Software Engineering: Software Design and Project Management certificate">
+          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042547.png" alt="Software Engineering: Software Design and Project Management certificate" />
+        </button>
+      </div>
+    </section>
+
+    <dialog class="certificate-dialog" aria-label="Certificate preview">
+      <button class="certificate-dialog-close" type="button" aria-label="Close certificate preview">&times;</button>
+      <img class="certificate-dialog-image" alt="" />
+    </dialog>
 
     <section id="work" class="content-panel">
       <div class="section-heading">
@@ -196,46 +237,22 @@
 
   <script>
     const siteHeader = document.querySelector(".site-header");
-    const themeToggle = document.querySelector(".theme-toggle");
-    const heroImage = document.getElementById("hero-image");
     const scrollFadeElements = document.querySelectorAll(".hero, .content-panel");
-
-    const syncHeroImage = (isDark) => {
-      heroImage.classList.add("is-fading");
-
-      window.setTimeout(() => {
-        heroImage.src = isDark ? "assests/dp2.jpg" : "assests/dp.jpg";
-        heroImage.alt = isDark
-          ? "Archielled profile artwork in dark mode"
-          : "Archielled profile artwork in light mode";
-        heroImage.classList.remove("is-fading");
-      }, 160);
-    };
-
-    const setTheme = (isDark) => {
-      document.body.classList.toggle("dark-mode", isDark);
-      themeToggle.textContent = isDark ? "\u263E" : "\u263C";
-      themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
-      themeToggle.setAttribute("aria-pressed", String(isDark));
-      syncHeroImage(isDark);
-      localStorage.setItem("theme", isDark ? "dark" : "light");
-    };
-
-    setTheme(false);
-
-    themeToggle.addEventListener("click", () => {
-      setTheme(!document.body.classList.contains("dark-mode"));
-    });
 
     let previousScrollY = window.scrollY;
 
     window.addEventListener("scroll", () => {
+      if (document.documentElement.classList.contains("certificate-preview-open")) {
+        return;
+      }
+
       const currentScrollY = window.scrollY;
 
-      siteHeader.classList.toggle(
-        "is-hidden",
-        currentScrollY > previousScrollY && currentScrollY > siteHeader.offsetHeight
-      );
+      if (currentScrollY > previousScrollY && currentScrollY > siteHeader.offsetHeight) {
+        siteHeader.classList.add("is-hidden");
+      } else if (currentScrollY < previousScrollY) {
+        siteHeader.classList.remove("is-hidden");
+      }
 
       previousScrollY = currentScrollY;
     }, { passive: true });
@@ -290,6 +307,96 @@
     if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       startCarousel();
     }
+
+    const certificateDialog = document.querySelector(".certificate-dialog");
+    const certificateDialogImage = certificateDialog.querySelector(".certificate-dialog-image");
+    let certificateScrollPosition = 0;
+    let certificateCloseTimer;
+    const certificateBodyStyles = ["position", "top", "left", "right", "width"].map((property) => ({
+      property,
+      value: document.body.style.getPropertyValue(property),
+      priority: document.body.style.getPropertyPriority(property)
+    }));
+
+    document.querySelectorAll(".certification-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const certificateImage = card.querySelector(".certification-image");
+        certificateScrollPosition = window.scrollY;
+        siteHeader.classList.add("is-hidden");
+        certificateDialogImage.src = certificateImage.src;
+        certificateDialogImage.alt = certificateImage.alt;
+        certificateDialog.classList.remove("is-closing");
+        document.documentElement.classList.add("certificate-preview-open");
+        document.body.style.setProperty("position", "fixed");
+        document.body.style.setProperty("top", `-${certificateScrollPosition}px`);
+        document.body.style.setProperty("left", "0");
+        document.body.style.setProperty("right", "0");
+        document.body.style.setProperty("width", "100%");
+        certificateDialog.showModal();
+      });
+    });
+
+    const finishCertificatePreviewClose = () => {
+      if (!certificateDialog.open || !certificateDialog.classList.contains("is-closing")) {
+        return;
+      }
+
+      window.clearTimeout(certificateCloseTimer);
+      certificateDialog.close();
+      certificateDialog.classList.remove("is-closing");
+      certificateBodyStyles.forEach(({ property, value, priority }) => {
+        if (value) {
+          document.body.style.setProperty(property, value, priority);
+        } else {
+          document.body.style.removeProperty(property);
+        }
+      });
+
+      window.setTimeout(() => {
+        const scrollBehavior = document.documentElement.style.scrollBehavior;
+        document.documentElement.style.scrollBehavior = "auto";
+        document.documentElement.classList.remove("certificate-preview-open");
+        window.scrollTo(0, certificateScrollPosition);
+        document.documentElement.style.scrollBehavior = scrollBehavior;
+        previousScrollY = certificateScrollPosition;
+        siteHeader.classList.add("is-hidden");
+      });
+    };
+
+    const closeCertificatePreview = () => {
+      if (certificateDialog.open && !certificateDialog.classList.contains("is-closing")) {
+        certificateDialog.classList.add("is-closing");
+        certificateCloseTimer = window.setTimeout(finishCertificatePreviewClose, 220);
+      }
+    };
+
+    certificateDialog.addEventListener("animationend", (event) => {
+      if (event.target === certificateDialog && event.animationName === "certificate-zoom-out") {
+        finishCertificatePreviewClose();
+      }
+    });
+
+    certificateDialog.querySelector(".certificate-dialog-close").addEventListener("click", () => {
+      closeCertificatePreview();
+    });
+
+    certificateDialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeCertificatePreview();
+    });
+
+    certificateDialog.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeCertificatePreview();
+      }
+    });
+
+    certificateDialog.addEventListener("click", (event) => {
+      if (event.target === certificateDialog) {
+        closeCertificatePreview();
+      }
+    });
   </script>
 </body>
 </html>
