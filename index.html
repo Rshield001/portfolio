@@ -120,19 +120,33 @@
         <p class="eyebrow">Certificates</p>
       </div>
 
-      <div class="certifications-grid">
-        <button class="certification-card" type="button" aria-label="View Introduction to Software Engineering certificate">
-          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31 043117.png" alt="Introduction to Software Engineering certificate from IBM and Coursera" />
-        </button>
-        <button class="certification-card" type="button" aria-label="View Software Engineering: Modeling Software Systems using UML certificate">
-          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042522.png" alt="Software Engineering: Modeling Software Systems using UML certificate" />
-        </button>
-        <button class="certification-card" type="button" aria-label="View Software Engineering: Implementation and Testing certificate">
-          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042536.png" alt="Software Engineering: Implementation and Testing certificate" />
-        </button>
-        <button class="certification-card" type="button" aria-label="View Software Engineering: Software Design and Project Management certificate">
-          <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042547.png" alt="Software Engineering: Software Design and Project Management certificate" />
-        </button>
+      <div class="certifications-carousel" role="region" aria-label="Certificates" aria-roledescription="carousel">
+        <div class="certifications-viewport">
+          <div class="certifications-grid">
+            <button class="certification-card" type="button" aria-label="View Introduction to Software Engineering certificate">
+              <img class="certification-image" src="assests/certs/Screenshot%202026-10-31 043117.png" alt="Introduction to Software Engineering certificate from IBM and Coursera" />
+            </button>
+            <button class="certification-card" type="button" aria-label="View Software Engineering: Modeling Software Systems using UML certificate">
+              <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042522.png" alt="Software Engineering: Modeling Software Systems using UML certificate" />
+            </button>
+            <button class="certification-card" type="button" aria-label="View Software Engineering: Implementation and Testing certificate">
+              <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042536.png" alt="Software Engineering: Implementation and Testing certificate" />
+            </button>
+            <button class="certification-card" type="button" aria-label="View Software Engineering: Software Design and Project Management certificate">
+              <img class="certification-image" src="assests/certs/Screenshot%202026-10-31%20042547.png" alt="Software Engineering: Software Design and Project Management certificate" />
+            </button>
+            <button class="certification-card" type="button" aria-label="View Software Engineering: Software Design and Project Management certificate">
+              <img class="certification-image" src="assests/certs/data.png" alt="Software Engineering: Software Design and Project Management certificate" />
+            </button>
+            <button class="certification-card" type="button" aria-label="View Software Engineering: Software Design and Project Management certificate">
+              <img class="certification-image" src="assests/certs/data1.png" alt="Software Engineering: Software Design and Project Management certificate" />
+            </button>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-button previous-certificate" type="button" aria-label="Show previous certificate">&#8592;</button>
+          <button class="carousel-button next-certificate" type="button" aria-label="Show next certificate">&#8594;</button>
+        </div>
       </div>
     </section>
 
@@ -307,6 +321,113 @@
 
     const certificateDialog = document.querySelector(".certificate-dialog");
     const certificateDialogImage = certificateDialog.querySelector(".certificate-dialog-image");
+    const certificationCarousel = document.querySelector(".certifications-carousel");
+    const certificationViewport = certificationCarousel.querySelector(".certifications-viewport");
+    const certificationTrack = certificationCarousel.querySelector(".certifications-grid");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let certificateTimer;
+    let certificateAnimationDistance = 0;
+    let certificateAnimationDirection = 1;
+    let isCertificateAnimating = false;
+    let isCertificateHovered = false;
+    let isCertificateFocused = false;
+    let isCertificateDialogOpen = false;
+    const certificateCards = Array.from(certificationTrack.children);
+
+    const updateCertificateSize = () => {
+      const gap = parseFloat(window.getComputedStyle(certificationTrack).columnGap);
+      const viewportWidth = certificationViewport.clientWidth;
+      const visibleCount = Math.max(1, Math.floor((viewportWidth + gap) / (210 + gap)));
+      const cardWidth = (viewportWidth - gap * (visibleCount - 1)) / visibleCount;
+      certificateAnimationDistance = cardWidth + gap;
+
+      certificateCards.forEach((card) => {
+        card.style.flexBasis = `${cardWidth}px`;
+      });
+
+      certificationTrack.style.transition = "none";
+      certificationTrack.style.transform = "translateX(0)";
+      certificationTrack.offsetWidth;
+      certificationTrack.style.transition = "";
+      isCertificateAnimating = false;
+    };
+
+    const moveCertificate = (direction) => {
+      if (isCertificateAnimating) {
+        return;
+      }
+
+      isCertificateAnimating = true;
+      certificateAnimationDirection = direction;
+      if (direction < 0) {
+        certificationTrack.insertBefore(certificationTrack.lastElementChild, certificationTrack.firstElementChild);
+        certificationTrack.style.transition = "none";
+        certificationTrack.style.transform = `translateX(-${certificateAnimationDistance}px)`;
+        certificationTrack.offsetWidth;
+      }
+
+      certificationTrack.style.transition = "";
+      certificationTrack.style.transform = direction < 0 ? "translateX(0)" : `translateX(-${certificateAnimationDistance}px)`;
+    };
+
+    certificationTrack.addEventListener("transitionend", (event) => {
+      if (event.target !== certificationTrack || event.propertyName !== "transform" || !isCertificateAnimating) {
+        return;
+      }
+
+      if (certificateAnimationDirection > 0) {
+        certificationTrack.append(certificationTrack.firstElementChild);
+      }
+
+      certificationTrack.style.transition = "none";
+      certificationTrack.style.transform = "translateX(0)";
+      certificationTrack.offsetWidth;
+      certificationTrack.style.transition = "";
+      isCertificateAnimating = false;
+    });
+
+    const updateCertificateTimer = () => {
+      window.clearInterval(certificateTimer);
+      if (!reducedMotion && !isCertificateHovered && !isCertificateFocused && !isCertificateDialogOpen && !document.hidden) {
+        certificateTimer = window.setInterval(() => moveCertificate(1), 3000);
+      }
+    };
+
+    certificationCarousel.querySelector(".previous-certificate").addEventListener("click", () => {
+      moveCertificate(-1);
+      updateCertificateTimer();
+    });
+
+    certificationCarousel.querySelector(".next-certificate").addEventListener("click", () => {
+      moveCertificate(1);
+      updateCertificateTimer();
+    });
+
+    certificationCarousel.addEventListener("pointerenter", () => {
+      isCertificateHovered = true;
+      updateCertificateTimer();
+    });
+
+    certificationCarousel.addEventListener("pointerleave", () => {
+      isCertificateHovered = false;
+      updateCertificateTimer();
+    });
+
+    certificationCarousel.addEventListener("focusin", () => {
+      isCertificateFocused = true;
+      updateCertificateTimer();
+    });
+
+    certificationCarousel.addEventListener("focusout", (event) => {
+      isCertificateFocused = certificationCarousel.contains(event.relatedTarget);
+      updateCertificateTimer();
+    });
+
+    document.addEventListener("visibilitychange", updateCertificateTimer);
+    window.addEventListener("resize", updateCertificateSize);
+    updateCertificateSize();
+    updateCertificateTimer();
+
     let certificateScrollPosition = 0;
     let certificateCloseTimer;
     const certificateBodyStyles = ["position", "top", "left", "right", "width"].map((property) => ({
@@ -318,6 +439,8 @@
     document.querySelectorAll(".certification-card").forEach((card) => {
       card.addEventListener("click", () => {
         const certificateImage = card.querySelector(".certification-image");
+        isCertificateDialogOpen = true;
+        updateCertificateTimer();
         certificateScrollPosition = window.scrollY;
         siteHeader.classList.add("is-hidden");
         certificateDialogImage.src = certificateImage.src;
@@ -357,6 +480,8 @@
         document.documentElement.style.scrollBehavior = scrollBehavior;
         previousScrollY = certificateScrollPosition;
         siteHeader.classList.add("is-hidden");
+        isCertificateDialogOpen = false;
+        updateCertificateTimer();
       });
     };
 

@@ -567,15 +567,46 @@ ul {
   gap: 1rem;
 }
 
-.certifications-grid {
+.certifications-carousel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.certifications-viewport {
+  grid-column: 2;
+  grid-row: 1;
+  overflow: hidden;
+  margin-top: -12px;
+}
+
+.certifications-carousel .carousel-controls {
+  display: contents;
+}
+
+.certifications-carousel .previous-certificate,
+.certifications-carousel .next-certificate {
+  grid-row: 1;
+}
+
+.certifications-carousel .previous-certificate {
+  grid-column: 1;
+}
+
+.certifications-carousel .next-certificate {
+  grid-column: 3;
+}
+
+.certifications-grid {
+  display: flex;
   gap: 1rem;
+  transition: transform 0.45s ease;
 }
 
 .certification-card {
   display: flex;
-  width: 100%;
+  flex: 0 0 auto;
   padding: 0;
   overflow: hidden;
   border: 1px solid rgba(0, 240, 255, 0.2);
