@@ -6,6 +6,7 @@
   --primary: #00f0ff;
   --primary-dark: #00aeba;
   --accent: #ff2bd6;
+  --pixel-cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill='%23061116' d='M1 0h3v2h2v2h2v2h2v2h-3v2h1v2H6v-2H5V8H3v3H1z'/%3E%3Cpath fill='%2300f0ff' d='M2 2h1v2h2v2h2v2h1v1H6v2H5V7H3v3H2z'/%3E%3C/svg%3E") 2 2;
   --text: #edfaff;
   --muted: #9aabba;
   --line: rgba(0, 240, 255, 0.2);
@@ -1036,5 +1037,22 @@ ul {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  body,
+  a,
+  button {
+    cursor: var(--pixel-cursor), auto;
+  }
+
+  .certification-card {
+    cursor: var(--pixel-cursor), zoom-in;
+  }
+
+  .carousel-button,
+  .certificate-dialog-close {
+    cursor: var(--pixel-cursor), pointer;
   }
 }
